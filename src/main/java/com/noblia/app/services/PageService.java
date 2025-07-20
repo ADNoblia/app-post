@@ -1,10 +1,10 @@
 package com.noblia.app.services;
 
+import org.springframework.stereotype.Service;
+
 import com.noblia.app.dtos.PageRequest;
 import com.noblia.app.dtos.PageResponse;
 import com.noblia.app.dtos.PostRequest;
-import com.noblia.app.dtos.PostResponse;
-import org.springframework.stereotype.Service;
 
 @Service
 public interface PageService {
