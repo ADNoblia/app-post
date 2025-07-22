@@ -37,14 +37,18 @@ public class PageController {
         return ResponseEntity.created(URI.create(uri)).build();
     }
 
-    @PutMapping
-    public ResponseEntity<?> updatePage() {
-        return null;
+    @PutMapping(path = "{title}")
+    public ResponseEntity<PageResponse> updatePage(
+            @PathVariable String title,
+            @RequestBody PageRequest request
+    ) {
+        return ResponseEntity.ok(this.pageService.update(request, title));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletePage() {
-        return null;
+    @DeleteMapping(path = "{title}")
+    public ResponseEntity<Void> deletePage(@PathVariable String title) {
+        this.pageService.delete(title);
+        return ResponseEntity.noContent().build();
     }
 
     private String normalizeTitle(String title) {

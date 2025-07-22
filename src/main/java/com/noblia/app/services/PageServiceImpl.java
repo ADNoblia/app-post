@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.noblia.app.dtos.PostResponse;
+import com.noblia.app.exceptions.TitleNotValueException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse create(PageRequest page) {
+        this.validTitle(page.getTitle());
         final var entity = new PageEntity(); // Craemos un objeto e la base de datos
         BeanUtils.copyProperties(page, entity); // Copiamos los argumentos del argumento PAGE en ENTITY
 
@@ -69,6 +71,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse update(PageRequest page, String title) {
+        this.validTitle(page.getTitle());
         final var entityResponse = this.pageRepository.findByTitle(title)
                 .orElseThrow( () -> new IllegalArgumentException("No se encuenta el titulo"));
         entityResponse.setTitle(page.getTitle());
@@ -79,7 +82,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public void delte(String title) {
+    public void delete(String title) {
         if (this.pageRepository.existsByTitle(title)) {
             log.info("Pagina Elimada");
             this.pageRepository.deleteByTitle(title);
@@ -96,5 +99,11 @@ public class PageServiceImpl implements PageService {
     @Override
     public PageResponse deletePost(Long idPost) {
         return null;
+    }
+
+    private void validTitle(String title) {
+        if (title.contains("5678") || title.contains("12345")) {
+            throw new TitleNotValueException("El titulo esta prohibido");
+        }
     }
 }
